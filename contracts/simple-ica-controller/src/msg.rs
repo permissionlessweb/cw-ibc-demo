@@ -14,9 +14,7 @@ pub struct InstantiateMsg {}
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
     /// Changes the admin
-    UpdateAdmin {
-        admin: String,
-    },
+    UpdateAdmin { admin: String },
     SendMsgs {
         channel_id: String,
         /// Note: we don't handle custom messages on remote chains

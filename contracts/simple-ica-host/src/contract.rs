@@ -1,10 +1,10 @@
 use cosmwasm_std::{
-    entry_point, from_json, to_json_binary, to_json_vec, wasm_execute, BankMsg, Binary,
-    ContractResult, CosmosMsg, Deps, DepsMut, Empty, Env, Event, Ibc3ChannelOpenResponse,
-    IbcBasicResponse, IbcChannelCloseMsg, IbcChannelConnectMsg, IbcChannelOpenMsg,
-    IbcChannelOpenResponse, IbcPacketAckMsg, IbcPacketReceiveMsg, IbcPacketTimeoutMsg,
-    IbcReceiveResponse, MessageInfo, Order, QuerierWrapper, QueryRequest, QueryResponse, Reply,
-    Response, StdError, StdResult, SubMsg, SystemResult, WasmMsg,
+    entry_point, from_json, to_json_binary, to_json_vec, wasm_execute, Binary, ContractResult,
+    CosmosMsg, Deps, DepsMut, Empty, Env, Event, Ibc3ChannelOpenResponse, IbcBasicResponse,
+    IbcChannelCloseMsg, IbcChannelConnectMsg, IbcChannelOpenMsg, IbcChannelOpenResponse,
+    IbcPacketAckMsg, IbcPacketReceiveMsg, IbcPacketTimeoutMsg, IbcReceiveResponse, MessageInfo,
+    Order, QuerierWrapper, QueryRequest, QueryResponse, Reply, Response, StdError, StdResult,
+    SubMsg, SystemResult, WasmMsg,
 };
 use cw_utils::parse_instantiate_response_data;
 use simple_ica::{
@@ -13,9 +13,7 @@ use simple_ica::{
 };
 
 use crate::error::ContractError;
-use crate::msg::{
-    AccountInfo, AccountResponse, InstantiateMsg, ListAccountsResponse, QueryMsg, ReflectExecuteMsg,
-};
+use crate::msg::{AccountInfo, AccountResponse, InstantiateMsg, ListAccountsResponse, QueryMsg};
 use crate::state::{Config, ACCOUNTS, CONFIG, PENDING, RESULTS};
 
 pub const RECEIVE_DISPATCH_ID: u64 = 1234;
