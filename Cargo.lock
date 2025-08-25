@@ -467,6 +467,7 @@ dependencies = [
 [[package]]
 name = "cw1"
 version = "3.0.0"
+source = "git+https://github.com/permissionlessweb/cw-plus?branch=bump%2Fv3#91fb2f61ac9352933367b4d4728ea4dafacf941c"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -477,6 +478,7 @@ dependencies = [
 [[package]]
 name = "cw1-whitelist"
 version = "3.0.0"
+source = "git+https://github.com/permissionlessweb/cw-plus?branch=bump%2Fv3#91fb2f61ac9352933367b4d4728ea4dafacf941c"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
