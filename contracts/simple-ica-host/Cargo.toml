@@ -27,13 +27,13 @@ overflow-checks = true
 
 [dependencies]
 simple-ica = { version = "0.3.0", path = "../../packages/simple-ica" }
-cosmwasm-std = { version = "2.0.0", features = ["iterator", "stargate"] }
-cw-storage-plus = { version = "2.0.0" }
-cw-utils = { version = "2.0.0" }
-cw1-whitelist = { version = "2.0.0", features = ["library"] }
-schemars = "0.8.1"
+cosmwasm-std = { version = "3.0.0", features = ["iterator", "stargate"] }
+cw-storage-plus = { version = "3.0.0" }
+cw-utils = { version = "3.0.0" }
+cw1-whitelist = {   features = ["library"], path = "../../../cw-plus/contracts/cw1-whitelist" }
+schemars = "0.8.4"
 serde = { version = "1.0.103", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0.23" }
 
 [dev-dependencies]
-cosmwasm-schema = { version = "2.0.0" }
+cosmwasm-schema = { version = "3.0.0" }

@@ -5,7 +5,7 @@ use cw_utils::ParseReplyError;
 
 use simple_ica::SimpleIcaError;
 
-#[derive(Error, Debug, PartialEq)]
+#[derive(Error, Debug)]
 pub enum ContractError {
     #[error("{0}")]
     Std(#[from] StdError),

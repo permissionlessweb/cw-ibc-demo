@@ -4,7 +4,7 @@ use cosmwasm_std::StdError;
 
 use simple_ica::SimpleIcaError;
 
-#[derive(Error, Debug, PartialEq)]
+#[derive(Error, Debug)]
 pub enum ContractError {
     #[error("{0}")]
     Std(#[from] StdError),

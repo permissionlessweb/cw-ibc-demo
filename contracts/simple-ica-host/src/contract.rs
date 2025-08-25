@@ -74,7 +74,6 @@ pub fn ibc_channel_open(
     msg: IbcChannelOpenMsg,
 ) -> Result<IbcChannelOpenResponse, ContractError> {
     let channel = msg.channel();
-
     check_order(&channel.order)?;
     // In ibcv3 we don't check the version string passed in the message
     // and only check the counterparty version.
@@ -98,7 +97,6 @@ pub fn ibc_channel_connect(
     let channel = msg.channel();
     let cfg = CONFIG.load(deps.storage)?;
     let chan_id = &channel.endpoint.channel_id;
-
     let init_msg = cw1_whitelist::msg::InstantiateMsg {
         admins: vec![env.contract.address.into_string()],
         mutable: false,
@@ -127,37 +125,38 @@ pub fn ibc_channel_connect(
 /// We also delete the channel entry from accounts.
 pub fn ibc_channel_close(
     deps: DepsMut,
-    env: Env,
+    _env: Env,
     msg: IbcChannelCloseMsg,
 ) -> StdResult<IbcBasicResponse> {
     let channel = msg.channel();
     // get contract address and remove lookup
     let channel_id = channel.endpoint.channel_id.as_str();
-    let reflect_addr = ACCOUNTS.load(deps.storage, channel_id)?;
     ACCOUNTS.remove(deps.storage, channel_id);
 
+    // TODO: find way to reimplement query all balances
+    // let reflect_addr = ACCOUNTS.load(deps.storage, channel_id)?;
     // transfer current balance if any to this host contract
-    let amount = deps.querier.query_all_balances(&reflect_addr)?;
-    let messages: Vec<SubMsg<Empty>> = if !amount.is_empty() {
-        let bank_msg = BankMsg::Send {
-            to_address: env.contract.address.into(),
-            amount,
-        };
-        let reflect_msg = ReflectExecuteMsg::ReflectMsg {
-            msgs: vec![bank_msg.into()],
-        };
-        let wasm_msg = wasm_execute(reflect_addr, &reflect_msg, vec![])?;
-        vec![SubMsg::new(wasm_msg)]
-    } else {
-        vec![]
-    };
-    let rescue_funds = !messages.is_empty();
+    // let amount = deps.querier.query_all_balances(&reflect_addr)?;
+    // let messages: Vec<SubMsg<Empty>> = if !amount.is_empty() {
+    //     let bank_msg = BankMsg::Send {
+    //         to_address: env.contract.address.into(),
+    //         amount,
+    //     };
+    //     let reflect_msg = ReflectExecuteMsg::ReflectMsg {
+    //         msgs: vec![bank_msg.into()],
+    //     };
+    //     let wasm_msg = wasm_execute(reflect_addr, &reflect_msg, vec![])?;
+    //     vec![SubMsg::new(wasm_msg)]
+    // } else {
+    //     vec![]
+    // };
+    // let rescue_funds = !messages.is_empty();
 
     Ok(IbcBasicResponse::new()
-        .add_submessages(messages)
+        // .add_submessages(messages)
         .add_attribute("action", "ibc_close")
         .add_attribute("channel_id", channel_id)
-        .add_attribute("rescue_funds", rescue_funds.to_string()))
+        .add_attribute("rescue_funds", false.to_string()))
 }
 
 #[entry_point]
@@ -186,7 +185,7 @@ pub fn reply_init_callback(deps: DepsMut, reply: Reply) -> Result<Response, Cont
     PENDING.remove(deps.storage);
 
     // parse contract info from data
-    let sub_msg_response = reply.result.into_result().map_err(StdError::generic_err)?;
+    let sub_msg_response = reply.result.into_result().map_err(StdError::msg)?;
     let raw_addr =
         parse_instantiate_response_data(sub_msg_response.data.unwrap_or_default().as_slice())?
             .contract_address;
@@ -219,7 +218,7 @@ pub fn ibc_packet_receive(
         PacketMsg::Dispatch { msgs, .. } => receive_dispatch(deps, caller, msgs),
         PacketMsg::IbcQuery { msgs, .. } => receive_query(deps.as_ref(), msgs),
         PacketMsg::WhoAmI {} => receive_who_am_i(deps, caller),
-        PacketMsg::Balances {} => receive_balances(deps, caller),
+        PacketMsg::Balances { coins } => receive_balances(deps, caller, coins),
     }
 }
 
@@ -230,10 +229,10 @@ fn unparsed_query(
     let raw = to_json_vec(request)?;
     match querier.raw_query(&raw) {
         SystemResult::Err(system_err) => {
-            Err(StdError::generic_err(format!("Querier system error: {}", system_err)).into())
+            Err(StdError::msg(format!("Querier system error: {}", system_err)).into())
         }
         SystemResult::Ok(ContractResult::Err(contract_err)) => {
-            Err(StdError::generic_err(format!("Querier contract error: {}", contract_err)).into())
+            Err(StdError::msg(format!("Querier contract error: {}", contract_err)).into())
         }
         SystemResult::Ok(ContractResult::Ok(value)) => Ok(value),
     }
@@ -268,9 +267,16 @@ fn receive_who_am_i(deps: DepsMut, caller: String) -> Result<IbcReceiveResponse,
 }
 
 // processes PacketMsg::Balances variant
-fn receive_balances(deps: DepsMut, caller: String) -> Result<IbcReceiveResponse, ContractError> {
+fn receive_balances(
+    deps: DepsMut,
+    caller: String,
+    coins: Vec<String>,
+) -> Result<IbcReceiveResponse, ContractError> {
     let account = ACCOUNTS.load(deps.storage, &caller)?;
-    let balances = deps.querier.query_all_balances(&account)?;
+    let mut balances = Vec::with_capacity(coins.len());
+    for coin in coins {
+        balances.push(deps.querier.query_balance(&account, coin)?);
+    }
     let response = BalancesResponse {
         account: account.into(),
         balances,
@@ -592,41 +598,43 @@ mod tests {
         let raw = query(deps.as_ref(), mock_env(), QueryMsg::ListAccounts {}).unwrap();
         let res: ListAccountsResponse = from_json(&raw).unwrap();
         assert_eq!(1, res.accounts.len());
-        let balance = deps
-            .as_ref()
-            .querier
-            .query_all_balances(account.clone())
-            .unwrap();
-        assert_eq!(funds, balance);
+
+        // let balance = deps
+        //     .as_ref()
+        //     .querier
+        //     .query_all_balances(account.clone())
+        //     .unwrap();
+        // assert_eq!(funds, balance);
 
         // close the channel
         let channel = mock_ibc_channel_close_init(channel_id, APP_ORDER, IBC_APP_VERSION);
-        let res = ibc_channel_close(deps.as_mut(), mock_env(), channel).unwrap();
+        let _res = ibc_channel_close(deps.as_mut(), mock_env(), channel).unwrap();
 
+        // TODO: reimplement method to query balance to recover any remaining funds on channel close
         // it pulls out all money from the reflect contract
-        assert_eq!(1, res.messages.len());
-        if let CosmosMsg::Wasm(WasmMsg::Execute {
-            contract_addr, msg, ..
-        }) = &res.messages[0].msg
-        {
-            assert_eq!(contract_addr.as_str(), account.as_str());
-            let reflect: ReflectExecuteMsg = from_json(msg).unwrap();
-            match reflect {
-                ReflectExecuteMsg::ReflectMsg { msgs } => {
-                    assert_eq!(1, msgs.len());
-                    assert_eq!(
-                        &msgs[0],
-                        &BankMsg::Send {
-                            to_address: MOCK_CONTRACT_ADDR.into(),
-                            amount: funds
-                        }
-                        .into()
-                    )
-                }
-            }
-        } else {
-            panic!("Unexpected message: {:?}", &res.messages[0]);
-        }
+        // assert_eq!(1, res.messages.len());
+        // if let CosmosMsg::Wasm(WasmMsg::Execute {
+        //     contract_addr, msg, ..
+        // }) = &res.messages[0].msg
+        // {
+        //     assert_eq!(contract_addr.as_str(), account.as_str());
+        //     let reflect: ReflectExecuteMsg = from_json(msg).unwrap();
+        //     match reflect {
+        //         ReflectExecuteMsg::ReflectMsg { msgs } => {
+        //             assert_eq!(1, msgs.len());
+        //             assert_eq!(
+        //                 &msgs[0],
+        //                 &BankMsg::Send {
+        //                     to_address: MOCK_CONTRACT_ADDR.into(),
+        //                     amount: funds
+        //                 }
+        //                 .into()
+        //             )
+        //         }
+        //     }
+        // } else {
+        //     panic!("Unexpected message: {:?}", &res.messages[0]);
+        // }
 
         // and removes the account lookup
         let raw = query(deps.as_ref(), mock_env(), QueryMsg::ListAccounts {}).unwrap();

@@ -50,8 +50,8 @@ pub fn execute(
             msgs,
             callback_id,
         } => execute_ibc_query(deps, env, info, channel_id, msgs, callback_id),
-        ExecuteMsg::CheckRemoteBalance { channel_id } => {
-            execute_check_remote_balance(deps, env, info, channel_id)
+        ExecuteMsg::CheckRemoteBalance { channel_id, coins } => {
+            execute_check_remote_balance(deps, env, info, channel_id, coins)
         }
         ExecuteMsg::SendFunds {
             ica_channel_id,
@@ -122,13 +122,14 @@ pub fn execute_check_remote_balance(
     _env: Env,
     info: MessageInfo,
     channel_id: String,
+    coins: Vec<String>,
 ) -> Result<Response, ContractError> {
     let cfg = CONFIG.load(deps.storage)?;
     if !cfg.admin.eq(&info.sender) {
         return Err(ContractError::Unauthorized {});
     }
 
-    let ica_msg = simple_ica_controller::msg::ExecuteMsg::CheckRemoteBalance { channel_id };
+    let ica_msg = simple_ica_controller::msg::ExecuteMsg::CheckRemoteBalance { channel_id, coins };
     let msg = WasmMsg::Execute {
         contract_addr: cfg.simple_ica_controller.into(),
         msg: to_json_binary(&ica_msg)?,
@@ -244,7 +245,7 @@ mod tests {
         // bob cannot execute them
         let info = message_info(&bob, &[]);
         let err = execute(deps.as_mut(), mock_env(), info, execute_msg.clone()).unwrap_err();
-        assert_eq!(err, ContractError::Unauthorized {});
+        assert_eq!(err.to_string(), ContractError::Unauthorized {}.to_string());
 
         // but alice can (original owner)
         let info = message_info(&alice, &[]);

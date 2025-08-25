@@ -116,7 +116,7 @@ pub fn ibc_packet_ack(
             ..
         } => acknowledge_query(deps, env, caller, sender, callback_id, msg),
         PacketMsg::WhoAmI {} => acknowledge_who_am_i(deps, caller, res),
-        PacketMsg::Balances {} => acknowledge_balances(deps, env, caller, res),
+        PacketMsg::Balances { coins } => acknowledge_balances(deps, env, caller, coins, res),
     }
 }
 
@@ -214,6 +214,7 @@ fn acknowledge_balances(
     deps: DepsMut,
     env: Env,
     caller: String,
+    _coins: Vec<String>,
     ack: StdAck,
 ) -> Result<IbcBasicResponse, ContractError> {
     // ignore errors (but mention in log)

@@ -18,7 +18,9 @@ pub enum PacketMsg {
         callback_id: Option<String>,
     },
     WhoAmI {},
-    Balances {},
+    Balances {
+        coins: Vec<String>,
+    },
 }
 
 /// This is a generic ICS acknowledgement format.

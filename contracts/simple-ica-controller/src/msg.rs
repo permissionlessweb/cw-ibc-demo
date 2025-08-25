@@ -26,6 +26,7 @@ pub enum ExecuteMsg {
     },
     CheckRemoteBalance {
         channel_id: String,
+        coins: Vec<String>,
     },
     IbcQuery {
         channel_id: String,
