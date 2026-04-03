@@ -14,16 +14,16 @@ crate-type = ["cdylib", "rlib"]
 library = []
 
 [dependencies]
-simple-ica-controller = { version = "0.3.0", path = "../simple-ica-controller", features = [
+simple-ica-controller = { path = "../simple-ica-controller" }
     "library",
 ] }
-simple-ica = { version = "0.3.0", path = "../../packages/simple-ica" }
-cw-utils = { version = "3.0.0" }
-cw2 = { version = "3.0.0" }
+simple-ica = { path = "../../packages/simple-ica" }
+cw-utils = { path = "../../../cw-minus/packages/cw-utils" }
+cw2 = { path = "../../../cw-minus/packages/cw2" }
 cw-storage-plus = { version = "3.0.0" }
 cosmwasm-schema = { version = "3.0.0" }
 cosmwasm-std = { version = "3.0.0", features = ["staking", "stargate"] }
-schemars = "0.8.4"
+schemars = "0.8"
 serde = { version = "1.0.103", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0.23" }
 

@@ -28,11 +28,11 @@ overflow-checks = true
 library = []
 
 [dependencies]
-simple-ica = { version = "0.3.0", path = "../../packages/simple-ica" }
+simple-ica = { path = "../../packages/simple-ica" }
 cosmwasm-std = { version = "3.0.0", features = ["iterator", "stargate"] }
 cw-storage-plus = { version = "3.0.0" }
-cw-utils = { version = "3.0.0" }
-schemars = "0.8.4"
+cw-utils = { path = "../../../cw-minus/packages/cw-utils" }
+schemars = "0.8"
 serde = { version = "1.0.103", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0.23" }
 

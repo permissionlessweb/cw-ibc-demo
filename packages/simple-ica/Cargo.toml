@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 cosmwasm-std  = { version = "3.0.0", features = ["stargate"] }
-schemars      = { version = "0.8.4" }
+schemars      = { version = "0.8.22" }
 serde         = { version = "1.0.103", features = ["derive"], default-features = false }
 thiserror     = { version = "1.0.23" }
 
