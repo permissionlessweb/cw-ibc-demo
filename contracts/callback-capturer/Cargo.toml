@@ -14,9 +14,7 @@ crate-type = ["cdylib", "rlib"]
 library = []
 
 [dependencies]
-simple-ica-controller = { path = "../simple-ica-controller" }
-    "library",
-] }
+simple-ica-controller = { path = "../simple-ica-controller", features = ["library"] }
 simple-ica = { path = "../../packages/simple-ica" }
 cw-utils = { path = "../../../cw-minus/packages/cw-utils" }
 cw2 = { path = "../../../cw-minus/packages/cw2" }
