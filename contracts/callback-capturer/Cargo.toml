@@ -20,9 +20,9 @@ simple-ica-controller = { path = "../simple-ica-controller" }
 simple-ica = { path = "../../packages/simple-ica" }
 cw-utils = { path = "../../../cw-minus/packages/cw-utils" }
 cw2 = { path = "../../../cw-minus/packages/cw2" }
-cw-storage-plus = { version = "3.0.0" }
-cosmwasm-schema = { version = "3.0.0" }
-cosmwasm-std = { version = "3.0.0", features = ["staking", "stargate"] }
+cw-storage-plus = { version = "3.0.1" }
+cosmwasm-schema = { version = "3.0.4" }
+cosmwasm-std = { version = "3.0.4", features = ["staking", "stargate"] }
 schemars = "0.8"
 serde = { version = "1.0.103", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0.23" }

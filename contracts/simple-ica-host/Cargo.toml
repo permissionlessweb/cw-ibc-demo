@@ -28,8 +28,8 @@ overflow-checks = true
 [dependencies]
 simple-ica     = { path = "../../packages/simple-ica" }
 
-cosmwasm-std   = { version = "3.0.0", features = ["iterator", "stargate"] }
-cw-storage-plus = { version = "3.0.0" }
+cosmwasm-std   = { version = "3.0.4", features = ["iterator", "stargate"] }
+cw-storage-plus = { version = "3.0.1" }
 cw-utils       = { path = "../../../cw-minus/packages/cw-utils" }
 schemars       = { version = "0.8.22" }
 serde          = { version = "1.0.103", features = ["derive"], default-features = false }
@@ -38,4 +38,4 @@ thiserror      = { version = "1.0.23" }
 cw1-whitelist  = { path = "../../../cw-plus/contracts/cw1-whitelist" }
 
 [dev-dependencies]
-cosmwasm-schema = { version = "3.0.0" }
+cosmwasm-schema = { version = "3.0.4" }
