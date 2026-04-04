@@ -28,13 +28,13 @@ overflow-checks = true
 library = []
 
 [dependencies]
-simple-ica = { path = "../../packages/simple-ica" }
-cosmwasm-std = { version = "3.0.4", features = ["iterator", "stargate"] }
-cw-storage-plus = { version = "3.0.1" }
-cw-utils = { path = "../../../cw-minus/packages/cw-utils" }
+simple-ica = { git = "https://github.com/permissionlessweb/cw-ibc-demo", branch = "cosmwasm3" }
+cosmwasm-std = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "mvp", features = ["iterator", "stargate"] }
+cw-storage-plus = { git = "https://github.com/permissionlessweb/cw-storage-plus", branch = "mvp" }
+cw-utils = { git = "https://github.com/permissionlessweb/cw-minus", branch = "main" }
 schemars = "0.8"
 serde = { version = "1.0.103", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0.23" }
 
 [dev-dependencies]
-cosmwasm-schema = { version = "3.0.4" }
+cosmwasm-schema = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "mvp" }

@@ -26,16 +26,16 @@ overflow-checks = true
 # for quicker tests, cargo test --lib
 
 [dependencies]
-simple-ica     = { path = "../../packages/simple-ica" }
+simple-ica = { git = "https://github.com/permissionlessweb/cw-ibc-demo", branch = "cosmwasm3" }
 
-cosmwasm-std   = { version = "3.0.4", features = ["iterator", "stargate"] }
-cw-storage-plus = { version = "3.0.1" }
-cw-utils       = { path = "../../../cw-minus/packages/cw-utils" }
+cosmwasm-std = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "mvp", features = ["iterator", "stargate"] }
+cw-storage-plus = { git = "https://github.com/permissionlessweb/cw-storage-plus", branch = "mvp" }
+cw-utils = { git = "https://github.com/permissionlessweb/cw-minus", branch = "main" }
 schemars       = { version = "0.8.22" }
 serde          = { version = "1.0.103", features = ["derive"], default-features = false }
 thiserror      = { version = "1.0.23" }
 
-cw1-whitelist  = { path = "../../../cw-plus/contracts/cw1-whitelist" }
+cw1-whitelist = { git = "https://github.com/permissionlessweb/cw-plus", branch = "main" }
 
 [dev-dependencies]
-cosmwasm-schema = { version = "3.0.4" }
+cosmwasm-schema = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "mvp" }
