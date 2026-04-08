@@ -29,12 +29,12 @@ library = []
 
 [dependencies]
 simple-ica = { path = "../../packages/simple-ica" }
-cosmwasm-std = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "mvp", features = ["iterator", "stargate"] }
-cw-storage-plus = { git = "https://github.com/permissionlessweb/cw-storage-plus", branch = "mvp" }
-cw-utils = { git = "https://github.com/permissionlessweb/cw-minus", branch = "main" }
+cosmwasm-std = { path = "../../../ZK/cw/zk-cosmwasm/packages/std", features = ["iterator", "stargate"] }
+cw-storage-plus = { path = "../../../ZK/cw/zk-storage-plus" }
+cw-utils = { path = "../../../ZK/cw/zk-cw-minus/packages/cw-utils" }
 schemars = "0.8"
 serde = { version = "1.0.103", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0.23" }
 
 [dev-dependencies]
-cosmwasm-schema = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "mvp" }
+cosmwasm-schema = { path = "../../../ZK/cw/zk-cosmwasm/packages/schema" }

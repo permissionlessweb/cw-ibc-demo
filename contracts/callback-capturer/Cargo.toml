@@ -16,11 +16,11 @@ library = []
 [dependencies]
 simple-ica-controller = { path = "../simple-ica-controller", features = ["library"] }
 simple-ica = { path = "../../packages/simple-ica" }
-cw-utils = { git = "https://github.com/permissionlessweb/cw-minus", branch = "main" }
-cw2 = { git = "https://github.com/permissionlessweb/cw-minus", branch = "main" }
-cw-storage-plus = { git = "https://github.com/permissionlessweb/cw-storage-plus", branch = "mvp" }
-cosmwasm-schema = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "mvp" }
-cosmwasm-std = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "mvp", features = ["staking", "stargate"] }
+cw-utils = { path = "../../../ZK/cw/zk-cw-minus/packages/cw-utils" }
+cw2 = { path = "../../../ZK/cw/zk-cw-minus/packages/cw2" }
+cw-storage-plus = { path = "../../../ZK/cw/zk-storage-plus" }
+cosmwasm-schema = { path = "../../../ZK/cw/zk-cosmwasm/packages/schema" }
+cosmwasm-std = { path = "../../../ZK/cw/zk-cosmwasm/packages/std", features = ["staking", "stargate"] }
 schemars = "0.8"
 serde = { version = "1.0.103", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0.23" }
