@@ -15,19 +15,19 @@ crate-type = ["cdylib", "rlib"]
 # for quicker tests, cargo test --lib
 
 [dependencies]
-simple-ica = { git = "https://github.com/permissionlessweb/cw-ibc-demo", branch = "zk-mvp" }
+simple-ica = { path = "../../packages/simple-ica" }
 
-cosmwasm-std = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "zk-mvp", features = ["iterator", "stargate"] }
-cw-storage-plus = { git = "https://github.com/permissionlessweb/cw-storage-plus", branch = "zk-mvp" }
-cw-utils = { git = "https://github.com/permissionlessweb/cw-minus", branch = "zk-mvp" }
+cosmwasm-std = { path = "../../../cosmwasm/packages/std", features = ["iterator", "stargate"] }
+cw-storage-plus = { path = "../../../cw-storage-plus" }
+cw-utils = { path = "../../../cw-minus/packages/cw-utils" }
 schemars       = { version = "0.8.22" }
 serde          = { version = "1.0.103", features = ["derive"], default-features = false }
 thiserror      = { version = "1.0.23" }
 
-cw1-whitelist = { git = "https://github.com/permissionlessweb/cw-plus", branch = "zk-mvp" }
+cw1-whitelist = { path = "../../../cw-plus/contracts/cw1-whitelist" }
 
 [dev-dependencies]
-cosmwasm-schema = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "zk-mvp" }
+cosmwasm-schema = { path = "../../../cosmwasm/packages/schema" }
 
 [profile.release]
 opt-level = 3

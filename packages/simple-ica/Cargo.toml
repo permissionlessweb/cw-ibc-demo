@@ -6,10 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cosmwasm-std = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "zk-mvp", features = ["stargate"] }
+cosmwasm-std = { path = "../../../cosmwasm/packages/std", features = ["stargate"] }
 schemars      = { version = "0.8.22" }
 serde         = { version = "1.0.103", features = ["derive"], default-features = false }
 thiserror     = { version = "1.0.23" }
 
 [dev-dependencies]
-cosmwasm-schema = { git = "https://github.com/permissionlessweb/cosmwasm", branch = "zk-mvp" }
+cosmwasm-schema = { path = "../../../cosmwasm/packages/schema" }

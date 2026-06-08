@@ -1,13 +1,11 @@
 [workspace]
-members = ["packages/*", "contracts/*"]
+members = ["contracts/*", "packages/*"]
 
-[profile.release.package.simple-ica-controller]
-codegen-units = 1
-incremental = false
-
-[profile.release.package.simple-ica-host]
-codegen-units = 1
-incremental = false
+[patch.'https://github.com/permissionlessweb/cw-ibc-demo']
+callback-capturer = { path = "contracts/callback-capturer" }
+simple-ica = { path = "packages/simple-ica" }
+simple-ica-controller = { path = "contracts/simple-ica-controller" }
+simple-ica-host = { path = "contracts/simple-ica-host" }
 
 [profile.release]
 rpath = false
@@ -16,3 +14,11 @@ overflow-checks = true
 opt-level = 3
 debug = false
 debug-assertions = false
+
+[profile.release.package.simple-ica-controller]
+codegen-units = 1
+incremental = false
+
+[profile.release.package.simple-ica-host]
+codegen-units = 1
+incremental = false
